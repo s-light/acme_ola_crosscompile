@@ -1,6 +1,8 @@
 # How to compile OLA for ACME boards
+https://github.com/s-light/acme_ola_crosscompile
+
 07.02.2016 18:42 s-light   
-to be able to cross-compile ola for the ACME boards with an debian base system for me the following worked:  
+goal: cross-compile ola for the ACME Aria & Arietta boards.
 (tested with Aria G25; for other board there may be modifications needed...)
 
 
