@@ -203,6 +203,11 @@ if it is ready install it and make the new libs accessible
 root@username:/home/light/ola# make install
 root@username:/home/light/ola# ldconfig
 ```
+now you can give it a test-run:
+```shell
+root@username:/home/light/ola# olad -l3
+```
+olad should start up.(on an emulated arm hw ;-) )
 
 if you have your work done exit the shell and remove the qemu emulator:
 ```shell
@@ -210,7 +215,6 @@ root@username:/# exit
 ~/debian_jessie$ sudo rm target-rootfs/usr/bin/qemu-arm-static
 ```
 now copy your rootfs to the sd-card and test it:
-as last step you now can copy your new target-rootfs to the sd card:
 ```shell
 ~/debian_jessie$ sudo rsync -axHAX --progress target-rootfs/ /media/$USER/rootfs/
 ```
