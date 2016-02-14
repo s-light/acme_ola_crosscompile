@@ -188,12 +188,12 @@ as first step run autoreconf (and for the first time with `-i` to install all mi
 ```shell
 root@username:/home/light/ola# autoreconf -i
 ```
-now you can configure your build-options. for a overview try `./configure --help`.
-here a 'relative small' config with only the plugins i currently need..
+now you can configure your build-options. for a overview try `./configure --help`.  
+here is a 'relative small' config with only the plugins i needed..
 ```shell
 root@username:/home/light/ola# ./configure --enable-python-libs --disable-all-plugins --enable-dummy --enable-e131 --enable-spi --enable-usbpro --enable-artnet
 ```
-than just run make (with the -j option followed by the numbers of cores)
+then just run make (with the -j option followed by the numbers of cores)
 ```shell
 root@username:/home/light/ola# make -j 8
 ```
