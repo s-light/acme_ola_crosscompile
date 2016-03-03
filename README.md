@@ -127,8 +127,9 @@ allow ssh login to root
 root@username:/# sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/i' etc/ssh/sshd_config
 ```
 other things to do??
+for example install some python packages:
 ```shell
-root@username:/#
+root@username:/# pip install spidev
 ```
 if you have your work done exit the shell and remove the qemu emulator:
 ```shell
@@ -144,25 +145,27 @@ as last step you now can copy your new target-rootfs to the sd card:
 
 ## 4. Compile the Kernel:  
 ```shell
-make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- acme-aria_defconfig
+~/linux-4.4.1$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- acme-aria_defconfig
 ```
 check that 'User mode SPI support' is active:
 ```shell
-make ARCH=arm menuconfig
+~/linux-4.4.1$ make ARCH=arm menuconfig
 -> Device Drivers
     -> [*] SPI Support
         -> <*> Atmel SPI
         -> <*> User mode SPI support
 ```
 ```shell
-make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- acme-aria.dtb
+~/linux-4.4.1$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- acme-aria.dtb
 ```
 ```shell
-make -j8 ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- zImage
+~/linux-4.4.1$ make -j8 ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- zImage
 ```
 ```shell
-cp arch/arm/boot/dts/acme-aria.dtb /media/$USER/boot/at91-ariag25.dtb
-cp arch/arm/boot/zImage /media/$USER/boot
+~/linux-4.4.1$ cp arch/arm/boot/dts/acme-aria.dtb /media/$USER/boot/at91-ariag25.dtb
+~/linux-4.4.1$ cp arch/arm/boot/zImage /media/$USER/boot
+#or
+~/linux-4.4.1$ scp arch/arm/boot/dts/acme-aria.dtb light@aria.local:/media/mmc_p1/at91-ariag25.dtb
 ```
 
 # now compile your application:
