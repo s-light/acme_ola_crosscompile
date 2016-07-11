@@ -86,6 +86,8 @@ no we prepare our emulated target:
 ```shell
 ~/debian_jessie$ sudo cp /usr/bin/qemu-arm-static target-rootfs/usr/bin
 ~/debian_jessie$ sudo mount -o bind /dev/ target-rootfs/dev/
+# enable internet access in chroot
+~/debian_jessie$ cp /etc/resolv.conf target-rootfs/etc/resolv.conf
 ```
 first configure dpkg
 ```shell
