@@ -23,8 +23,8 @@ You need two partitions on the card for Linux to be able to boot:
 * a big EXT4 for the root file system
 ```
 id  type     Label      Size
-1   FAT16    boot       128MB
-2   EXT4     rootfs     >800MB
+1   FAT32    boot       128MB
+2   EXT4     rootfs     >=2000MB
 ```
 
 ## 2. Compile AT91bootstrap:
@@ -59,8 +59,11 @@ Press <enter> to keep the current choice[*], or type selection number: 0
 with this setup you now can switch to the 4.7 version.
 than run `$ make CROSS_COMPILE=arm-linux-gnueabi-`
 and after this just switch back to auto or force 5.  
-than just follow the final step from the guide. (copy the bin to the card.)
-
+than just follow the final step from the guide.
+(copy+rename the bin to the card. check name of mounted boot partition - for me its 'BOOT' - not 'boot')
+```shell
+~/at91bootstrap-3.7 $ cp binaries/at91sam9x5_aria-sdcardboot-linux-zimage-dt-3.7.bin /media/$USER/BOOT/boot.bin
+```
 
 
 
@@ -87,7 +90,7 @@ no we prepare our emulated target:
 ~/debian_jessie$ sudo cp /usr/bin/qemu-arm-static target-rootfs/usr/bin
 ~/debian_jessie$ sudo mount -o bind /dev/ target-rootfs/dev/
 # enable internet access in chroot
-~/debian_jessie$ cp /etc/resolv.conf target-rootfs/etc/resolv.conf
+~/debian_jessie$ sudo cp /etc/resolv.conf target-rootfs/etc/resolv.conf
 ```
 first configure dpkg
 ```shell
@@ -97,7 +100,7 @@ go through the configuration as you like -
 the acme tutorial states you should choose `NO` at 'Use dash as default system shell (/bin/sh)?'.
 if this process is finished there are some default config settings to do:
 ```shell
-~/debian_jessie$ ./configs_ola.sh
+~/debian_jessie$ sudo ./configs_ola.sh
 ```
 (this sets up some default configs like network, hostname, ...)
 now we can enter the chroot session:
