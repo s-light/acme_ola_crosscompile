@@ -1,13 +1,15 @@
-# How to compile OLA for ACME boards
-https://github.com/s-light/acme_ola_crosscompile
+<!--lint disable list-item-indent-->
 
-07.02.2016 18:42 s-light   
+# How to compile OLA for ACME boards
+[https://github.com/s-light/acme_ola_crosscompile](https://github.com/s-light/acme_ola_crosscompile)
+
+14.01.2018 21:30 s-light (updated)  
 goal: cross-compile ola for the ACME Aria & Arietta boards.
 (tested with Aria G25; for other board there may be modifications needed...)
 
 
-setup everything like explained in the official ACME-tutorials:   
---> [Building a Debian Jessie Linux distribution](http://www.acmesystems.it/tutorials)   
+setup everything like explained in the official ACME-tutorials:  
+--> [Building a Debian Jessie Linux distribution](http://www.acmesystems.it/tutorials)  
 this guide is heavily based on the original tutorials.
 
 1. [Format the microSD](http://www.acmesystems.it/microsd_format)
@@ -17,7 +19,7 @@ this guide is heavily based on the original tutorials.
 
 i will shortly summarize all steps here:
 
-## 1. Format the (micro)SDCard:   
+## 1. Format the (micro)SDCard
 You need two partitions on the card for Linux to be able to boot:
 * a small FAT16 for the bootloader and device-tree
 * a big EXT4 for the root file system
@@ -27,15 +29,15 @@ id  type     Label      Size
 2   EXT4     rootfs     >=2000MB
 ```
 
-## 2. Compile AT91bootstrap:
-follow the original procedure: http://www.acmesystems.it/compile_at91bootstrap   
+## 2. Compile AT91bootstrap
+follow the [original procedure](http://www.acmesystems.it/compile_at91bootstrap)
 if you get to the step of 'Launch the compilation' we have a small modification:  
-this only works with gcc 4.7 but on my system (kubuntu 15.10) i had gcc 5.x installed.  
+this only works with gcc 4.7 but on my system (Kubuntu 17.04) i had gcc 6.3 installed automatically.  
 thanks to [Giulio Gaio](https://groups.google.com/d/msg/acmesystems/mAViwYA_bow/tum1WDJYEgAJ) for a workaround:  
 additionally install the 4.7 packages:  
 ```
-sudo apt-get install arm-linux-gnueabi-gcc-4.7
-sudo apt-get install arm-linux-gnueabi-g++-4.7
+sudo apt-get install gcc-4.7-arm-linux-gnueabi
+sudo apt-get install g++-4.7-arm-linux-gnueabi
 ```
 then you can create a alternative option to use one of the two installed:
 ```
@@ -43,7 +45,7 @@ sudo update-alternatives --install /usr/bin/arm-linux-gnueabi-gcc arm-linux-gnue
 sudo update-alternatives --install /usr/bin/arm-linux-gnueabi-gcc arm-linux-gnueabi-gcc /usr/bin/arm-linux-gnueabi-gcc-5 20 --slave /usr/bin/arm-linux-gnueabi-g++ arm-linux-gnueabi-g++ /usr/bin/arm-linux-gnueabi-g++-5
 ```
 now you can switch between the two with:  
-```shell
+```
 $ sudo update-alternatives --config arm-linux-gnueabi-gcc
 There are 2 choices for the alternative arm-linux-gnueabi-gcc (providing /usr/bin/arm-linux-gnueabi-gcc).
 
@@ -67,7 +69,7 @@ than just follow the final step from the guide.
 
 
 
-## 3. Build the rootfs:    
+## 3. Build the rootfs
 
 first install all needed packages.
 ```shell
