@@ -42,7 +42,7 @@ sudo apt-get install g++-4.7-arm-linux-gnueabi
 then you can create a alternative option to use one of the two installed:
 ```
 sudo update-alternatives --install /usr/bin/arm-linux-gnueabi-gcc arm-linux-gnueabi-gcc /usr/bin/arm-linux-gnueabi-gcc-4.7 10 --slave /usr/bin/arm-linux-gnueabi-g++ arm-linux-gnueabi-g++ /usr/bin/arm-linux-gnueabi-g++-4.7
-sudo update-alternatives --install /usr/bin/arm-linux-gnueabi-gcc arm-linux-gnueabi-gcc /usr/bin/arm-linux-gnueabi-gcc-5 20 --slave /usr/bin/arm-linux-gnueabi-g++ arm-linux-gnueabi-g++ /usr/bin/arm-linux-gnueabi-g++-5
+sudo update-alternatives --install /usr/bin/arm-linux-gnueabi-gcc arm-linux-gnueabi-gcc /usr/bin/arm-linux-gnueabi-gcc-6 20 --slave /usr/bin/arm-linux-gnueabi-g++ arm-linux-gnueabi-g++ /usr/bin/arm-linux-gnueabi-g++-6
 ```
 now you can switch between the two with:  
 ```
@@ -51,16 +51,16 @@ There are 2 choices for the alternative arm-linux-gnueabi-gcc (providing /usr/bi
 
   Selection    Path                                Priority   Status
 ------------------------------------------------------------
-* 0            /usr/bin/arm-linux-gnueabi-gcc-5     20        auto mode
+* 0            /usr/bin/arm-linux-gnueabi-gcc-6     20        auto mode
   1            /usr/bin/arm-linux-gnueabi-gcc-4.7   10        manual mode
-  2            /usr/bin/arm-linux-gnueabi-gcc-5     20        manual mode
+  2            /usr/bin/arm-linux-gnueabi-gcc-6     20        manual mode
 
 Press <enter> to keep the current choice[*], or type selection number: 0
 ```
 
 with this setup you now can switch to the 4.7 version.
 than run `$ make CROSS_COMPILE=arm-linux-gnueabi-`
-and after this just switch back to auto or force 5.  
+and after this just switch back to auto or force 6.  
 than just follow the final step from the guide.
 (copy+rename the bin to the card. check name of mounted boot partition - for me its 'BOOT' - not 'boot')
 ```shell
