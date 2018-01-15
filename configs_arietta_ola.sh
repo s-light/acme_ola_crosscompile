@@ -14,7 +14,7 @@ echo nameserver 8.8.4.4 >> $filename
 
 #Default network interfaces
 filename=$TARGET_ROOTFS_DIR/etc/network/interfaces
-# arietta usb-ethernet thing
+# Arietta usb-Ethernet thing
 echo auto lo > $filename
 echo iface lo inet loopback >> $filename
 echo pre-up modprobe g_ether >> $filename

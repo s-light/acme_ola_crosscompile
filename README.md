@@ -5,7 +5,7 @@
 
 14.01.2018 21:30 s-light (updated)  
 goal: cross-compile ola for the ACME Aria & Arietta boards.
-(tested with Aria G25; for other board there may be modifications needed...)
+(first written for Aria G25; now extended to support Arietta boards)
 
 
 setup everything like explained in the official ACME-tutorials:  
@@ -66,6 +66,9 @@ than just follow the final step from the guide.
 ```shell
 ~/at91bootstrap-3.7 $ cp binaries/at91sam9x5_aria-sdcardboot-linux-zimage-dt-3.7.bin /media/$USER/BOOT/boot.bin
 ```
+```shell
+~/at91bootstrap-3.7 $ cp binaries/at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.7.bin /media/$USER/BOOT/boot.bin
+```
 
 
 
@@ -82,9 +85,12 @@ create your working dir
 ~/debian_jessie$
 ```
 download the [multistrap_ola.conf](multistrap_ola.conf) i have prepared.
-it is based on the Aria (and commented out Arietta) conf and extended to also include all packages from the ola dependencies list plus some helpers.
+it is based on the Aria and Arietta conf and extended to also include all packages from the ola dependencies list plus some helpers.
 ```shell
-~/debian_jessie$ sudo multistrap -a armel -f multistrap_ola.conf
+~/debian_jessie$ sudo multistrap -a armel -f multistrap_aria_ola.conf
+```
+```shell
+~/debian_jessie$ sudo multistrap -a armel -f multistrap_arietta_ola.conf
 ```
 
 no we prepare our emulated target:
@@ -154,6 +160,9 @@ as last step you now can copy your new target-rootfs to the sd card:
 ```shell
 ~/linux-4.4.1$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- acme-aria_defconfig
 ```
+```shell
+~/linux-4.4.1$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- acme-arietta_defconfig
+```
 check that 'User mode SPI support' is active:
 ```shell
 ~/linux-4.4.1$ make ARCH=arm menuconfig
@@ -166,13 +175,24 @@ check that 'User mode SPI support' is active:
 ~/linux-4.4.1$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- acme-aria.dtb
 ```
 ```shell
+~/linux-4.4.1$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- acme-arietta.dtb
+```
+```shell
 ~/linux-4.4.1$ make -j8 ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- zImage
 ```
 ```shell
 ~/linux-4.4.1$ cp arch/arm/boot/dts/acme-aria.dtb /media/$USER/boot/at91-ariag25.dtb
 ~/linux-4.4.1$ cp arch/arm/boot/zImage /media/$USER/boot
 #or
-~/linux-4.4.1$ scp arch/arm/boot/dts/acme-aria.dtb light@aria.local:/media/mmc_p1/at91-ariag25.dtb
+~/linux-4.4.1$ scp arch/arm/boot/dts/acme-aria.dtb root@aria.local:/media/mmc_p1/at91-ariag25.dtb
+~/linux-4.4.1$ scp arch/arm/boot/zImage root@aria.local:/boot
+```
+```shell
+~/linux-4.4.1$ cp arch/arm/boot/dts/acme-arietta.dtb /media/$USER/boot/acme-arietta.dtb
+~/linux-4.4.1$ cp arch/arm/boot/zImage /media/$USER/boot
+#or
+~/linux-4.4.1$ scp arch/arm/boot/dts/acme-arietta.dtb root@192.168.10.10:/boot/acme-arietta.dtb
+~/linux-4.4.1$ scp arch/arm/boot/zImage root@192.168.10.10:/boot
 ```
 
 # now compile your application:
