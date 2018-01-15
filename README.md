@@ -206,44 +206,50 @@ prepare the chroot
 enter the chroot session:
 ```shell
 ~/debian_jessie$ sudo LC_ALL=C LANGUAGE=C LANG=C chroot target-rootfs /bin/bash
-root@username:/#
+root@username:/$
+```
+switch user to the normal one:
+```shell
+root@username:/$ su light
+light@username:/$
 ```
 
 first let us clone the ola repository:
 ```shell
-root@username:/# cd /home/light/
-root@username:/home/light# git clone https://github.com/OpenLightingProject/ola.git ola
-root@username:/home/light# cd ola
-root@username:/home/light/ola#
+light@username:/$ cd /home/light/
+light@username:/home/light$ git clone https://github.com/OpenLightingProject/ola.git ola
+light@username:/home/light$ cd ola
+light@username:/home/light/ola$
 ```
 as first step run autoreconf (and for the first time with `-i` to install all missing files)
 ```shell
-root@username:/home/light/ola# autoreconf -i
+light@username:/home/light/ola$ autoreconf -i
 ```
 now you can configure your build-options. for a overview try `./configure --help`.  
 here is a 'relative small' config with only the plugins i needed..
 ```shell
-root@username:/home/light/ola# ./configure --enable-python-libs --disable-all-plugins --enable-dummy --enable-e131 --enable-spi --enable-usbpro --enable-artnet
+light@username:/home/light/ola$ ./configure --enable-python-libs --disable-all-plugins --enable-dummy --enable-e131 --enable-spi --enable-usbpro --enable-artnet
 ```
 then just run make (with the -j option followed by the numbers of cores)
 ```shell
-root@username:/home/light/ola# make -j 8
+light@username:/home/light/ola$ make -j 8
 ```
 for me this took about 60min - i think the long time comes from the emulation..  
 if it is ready install it and make the new libs accessible
 ```shell
-root@username:/home/light/ola# make install
-root@username:/home/light/ola# ldconfig
+light@username:/home/light/ola$ make install
+light@username:/home/light/ola$ ldconfig
 ```
 now you can give it a test-run:
 ```shell
-root@username:/home/light/ola# olad -l3
+light@username:/home/light/ola$ olad -l3
 ```
 olad should start up.(on an emulated arm hw ;-) )
 
 if you have your work done exit the shell and remove the qemu emulator:
 ```shell
-root@username:/# exit
+light@username:/$ exit
+root@username:/$ exit
 ~/debian_jessie$ sudo rm target-rootfs/usr/bin/qemu-arm-static
 ```
 now copy your rootfs to the sd-card and test it:
