@@ -229,7 +229,7 @@ then just run make (with the -j option followed by the numbers of cores)
 ```shell
 root@username:/home/light/ola# make -j 8
 ```
-for me this took about 45min - i think the long time comes from the emulation..  
+for me this took about 60min - i think the long time comes from the emulation..  
 if it is ready install it and make the new libs accessible
 ```shell
 root@username:/home/light/ola# make install
