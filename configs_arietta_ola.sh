@@ -5,6 +5,8 @@ TARGET_ROOTFS_DIR="target-rootfs"
 #Board hostname
 filename=$TARGET_ROOTFS_DIR/etc/hostname
 echo arietta > $filename
+filename=$TARGET_ROOTFS_DIR/etc/hosts
+echo arietta > $filename
 # echo aria > $filename
 
 #Default name servers
@@ -41,8 +43,9 @@ filename=$TARGET_ROOTFS_DIR/etc/udev/rules.d/70-persistent-net.rules
 echo SUBSYSTEM=='"net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="*", ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNEL=="wlan*", NAME="wlan0"' > $filename
 
 #allow spi access by non root
+# echo groupadd --system spi
 filename=$TARGET_ROOTFS_DIR/etc/udev/rules.d/99-spi.rules
-echo SUBSYSTEM=="spidev", MODE="0666" >> $filename
+echo SUBSYSTEM=="spidev", GROUP="spi" >> $filename
 
 
 #microSD partitions mounting

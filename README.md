@@ -35,17 +35,17 @@ if you get to the step of 'Launch the compilation' we have a small modification:
 this only works with gcc 4.7 but on my system (Kubuntu 17.04) i had gcc 6.3 installed automatically.  
 thanks to [Giulio Gaio](https://groups.google.com/d/msg/acmesystems/mAViwYA_bow/tum1WDJYEgAJ) for a workaround:  
 additionally install the 4.7 packages:  
-```
+```shell
 sudo apt-get install gcc-4.7-arm-linux-gnueabi
 sudo apt-get install g++-4.7-arm-linux-gnueabi
 ```
 then you can create a alternative option to use one of the two installed:
-```
+```shell
 sudo update-alternatives --install /usr/bin/arm-linux-gnueabi-gcc arm-linux-gnueabi-gcc /usr/bin/arm-linux-gnueabi-gcc-4.7 10 --slave /usr/bin/arm-linux-gnueabi-g++ arm-linux-gnueabi-g++ /usr/bin/arm-linux-gnueabi-g++-4.7
 sudo update-alternatives --install /usr/bin/arm-linux-gnueabi-gcc arm-linux-gnueabi-gcc /usr/bin/arm-linux-gnueabi-gcc-6 20 --slave /usr/bin/arm-linux-gnueabi-g++ arm-linux-gnueabi-g++ /usr/bin/arm-linux-gnueabi-g++-6
 ```
 now you can switch between the two with:  
-```
+```shell
 $ sudo update-alternatives --config arm-linux-gnueabi-gcc
 There are 2 choices for the alternative arm-linux-gnueabi-gcc (providing /usr/bin/arm-linux-gnueabi-gcc).
 
@@ -114,39 +114,45 @@ if this process is finished there are some default config settings to do:
 now we can enter the chroot session:
 ```shell
 ~/debian_jessie$ sudo LC_ALL=C LANGUAGE=C LANG=C chroot target-rootfs /bin/bash
-root@username:/#
+root@username:/$
 ```
 so you have a shell that works in your target-rootfs - and also all commands are emulated by qemu in this environment.
 
 first set the root password:
 ```shell
-root@username:/# echo "root:acmes" | chpasswd
+root@username:/$ echo "root:acmes" | chpasswd
 ```
 then we add user:
 ```shell
-root@username:/# adduser light --disabled-password
-root@username:/# echo "light:sun" | chpasswd
+root@username:/$ adduser light --disabled-password
+root@username:/$ echo "light:sun" | chpasswd
 ```
 (these command are usable for scripting the actions..)
 now it makes sens to add the new user to some of the io related groups:
 ```shell
-root@username:/# usermod -aG  sudo light
-root@username:/# usermod -aG  plugdev light
-root@username:/# usermod -aG  dialout light
-root@username:/# usermod -aG  i2c light
+root@username:/$ usermod -aG  sudo light
+root@username:/$ usermod -aG  plugdev light
+root@username:/$ usermod -aG  dialout light
+root@username:/$ usermod -aG  i2c light
+```
+prepare spi access by non root user  
+([there are alternatives](https://raspberrypi.stackexchange.com/questions/26278/driving-led-stripes-as-non-root-user))
+```shell
+root@username:/$ sudo groupadd --system spi
+root@username:/$ usermod -aG  spi light
 ```
 allow ssh login to root
 ```shell
-root@username:/# sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/i' etc/ssh/sshd_config
+root@username:/$ sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/i' etc/ssh/sshd_config
 ```
 other things to do??
 for example install some python packages:
 ```shell
-root@username:/# pip install spidev
+root@username:/$ pip install spidev
 ```
 if you have your work done exit the shell and remove the qemu emulator:
 ```shell
-root@username:/# exit
+root@username:/$ exit
 ~/debian_jessie$ sudo rm target-rootfs/usr/bin/qemu-arm-static
 ```
 as last step you now can copy your new target-rootfs to the sd card:
@@ -217,32 +223,37 @@ light@username:/$
 first let us clone the ola repository:
 ```shell
 light@username:/$ cd /home/light/
-light@username:/home/light$ git clone https://github.com/OpenLightingProject/ola.git ola
-light@username:/home/light$ cd ola
-light@username:/home/light/ola$
+light@username:~$ git clone https://github.com/OpenLightingProject/ola.git ola
+light@username:~$ cd ola
+light@username:~/ola$
 ```
 as first step run autoreconf (and for the first time with `-i` to install all missing files)
 ```shell
-light@username:/home/light/ola$ autoreconf -i
+light@username:~/ola$ autoreconf -i
 ```
 now you can configure your build-options. for a overview try `./configure --help`.  
 here is a 'relative small' config with only the plugins i needed..
 ```shell
-light@username:/home/light/ola$ ./configure --enable-python-libs --disable-all-plugins --enable-dummy --enable-e131 --enable-spi --enable-usbpro --enable-artnet
+light@username:~/ola$ ./configure --enable-python-libs --disable-all-plugins --enable-dummy --enable-e131 --enable-spi --enable-usbpro --enable-artnet
 ```
 then just run make (with the -j option followed by the numbers of cores)
 ```shell
-light@username:/home/light/ola$ make -j 8
+light@username:~/ola$ make -j 8
 ```
 for me this took about 60min - i think the long time comes from the emulation..  
 if it is ready install it and make the new libs accessible
 ```shell
-light@username:/home/light/ola$ make install
-light@username:/home/light/ola$ ldconfig
+light@username:~/ola$ sudo make install
+light@username:/ola/$ exit
+root@username:/$ ldconfig
+root@username:/$ su light
+light@username:/$ cd ~
+light@username:~$
+
 ```
 now you can give it a test-run:
 ```shell
-light@username:/home/light/ola$ olad -l3
+light@username:/$ olad -l3
 ```
 olad should start up.(on an emulated arm hw ;-) )
 
