@@ -244,10 +244,8 @@ for me this took about 60min - i think the long time comes from the emulation..
 if it is ready install it and make the new libs accessible
 ```shell
 light@username:~/ola$ sudo make install
-light@username:/ola/$ exit
-root@username:/$ ldconfig
-root@username:/$ su light
-light@username:/$ cd ~
+# lots of text ;-)
+light@username:/ola/$ sudo ldconfig
 light@username:~$
 
 ```
