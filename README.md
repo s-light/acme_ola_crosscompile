@@ -207,7 +207,8 @@ this basically follows the original [Linux install guide](https://www.openlighti
 prepare the chroot
 ```shell
 ~/debian_jessie$ sudo cp /usr/bin/qemu-arm-static target-rootfs/usr/bin
-~/debian_jessie$ sudo mount -o bind /dev/ target-rootfs/dev/
+~/debian_jessie$ sudo mount --rbind /dev target-rootfs/dev/
+~/debian_jessie$ sudo mount --make-rslave target-rootfs/dev/
 ```
 enter the chroot session:
 ```shell
@@ -259,6 +260,7 @@ if you have your work done exit the shell and remove the qemu emulator:
 ```shell
 light@username:/$ exit
 root@username:/$ exit
+~/debian_jessie$ sudo umount -R target-rootfs/dev/
 ~/debian_jessie$ sudo rm target-rootfs/usr/bin/qemu-arm-static
 ```
 now copy your rootfs to the sd-card and test it:
