@@ -204,6 +204,14 @@ check that 'User mode SPI support' is active:
 # now compile your application:
 this basically follows the original [Linux install guide](https://www.openlighting.org/ola/linuxinstall/).
 
+for a easier usage i have created a chroot_start.sh script. this does the prepare and clean up scripts automatically
+usage is as following:
+```shell
+~/debian_jessie$ ./chroot_start.sh
+# this automatically enters the chroot.
+```
+if you use this jump to 'switch to the normal user' step.
+
 prepare the chroot
 ```shell
 ~/debian_jessie$ sudo cp /usr/bin/qemu-arm-static target-rootfs/usr/bin
@@ -215,6 +223,7 @@ enter the chroot session:
 ~/debian_jessie$ sudo LC_ALL=C LANGUAGE=C LANG=C chroot target-rootfs /bin/bash
 root@username:/$
 ```
+
 switch user to the normal one:
 ```shell
 root@username:/$ su light
@@ -256,13 +265,18 @@ light@username:/$ olad -l3
 ```
 olad should start up.(on an emulated arm hw ;-) )
 
-if you have your work done exit the shell and remove the qemu emulator:
+if you have your work done exit the shell
 ```shell
 light@username:/$ exit
 root@username:/$ exit
+```
+
+and if you did not use the `chroot_start.sh` script then you have to do the clean up:
+```shell
 ~/debian_jessie$ sudo umount -R target-rootfs/dev/
 ~/debian_jessie$ sudo rm target-rootfs/usr/bin/qemu-arm-static
 ```
+
 now copy your rootfs to the sd-card and test it:
 ```shell
 ~/debian_jessie$ sudo rsync -axHAX --progress target-rootfs/ /media/$USER/rootfs/
