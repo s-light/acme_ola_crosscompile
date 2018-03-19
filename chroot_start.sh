@@ -18,15 +18,9 @@ sudo mount --make-rslave target-rootfs/dev/
 
 ##########################################
 # start chroot
-sudo LC_ALL=C LANGUAGE=C LANG=C chroot target-rootfs /bin/bash
-# https://www.gnu.org/software/coreutils/manual/html_node/chroot-invocation.html
-# sudo LC_ALL=C LANGUAGE=C LANG=C chroot --userspec=light target-rootfs /bin/bash
-# this seems to not work as expected.
-
-# switch user to our default target user
-# sudo su light
-# and his home directory
-# cd ~
+# sudo LC_ALL=C LANGUAGE=C LANG=C chroot target-rootfs /bin/bash
+# make a full login as the target user
+sudo LC_ALL=C LANGUAGE=C LANG=C chroot target-rootfs /bin/login light
 
 ##########################################
 # we have exited the chroot...

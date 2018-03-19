@@ -207,32 +207,27 @@ this basically follows the original [Linux install guide](https://www.openlighti
 for a easier usage i have created a chroot_start.sh script. this does the prepare and clean up scripts automatically
 usage is as following:
 ```shell
-~/debian_jessie$ ./chroot_start.sh
-# this automatically enters the chroot.
+~/debian_jessie$ sudo ./chroot_start.sh
+# this automatically enters the chroot as the target user
+# you have to provide the target user password
 ```
-if you use this jump to 'switch to the normal user' step.
+if you use this [jump to 'use chroot'](use-chroot) step.
 
-prepare the chroot
+## prepare the chroot
 ```shell
 ~/debian_jessie$ sudo cp /usr/bin/qemu-arm-static target-rootfs/usr/bin
 ~/debian_jessie$ sudo mount --rbind /dev target-rootfs/dev/
 ~/debian_jessie$ sudo mount --make-rslave target-rootfs/dev/
 ```
-enter the chroot session:
+## enter the chroot session:
 ```shell
-~/debian_jessie$ sudo LC_ALL=C LANGUAGE=C LANG=C chroot target-rootfs /bin/bash
-root@username:/$
+~/debian_jessie$ sudo LC_ALL=C LANGUAGE=C LANG=C chroot target-rootfs /bin/login light
+light@username:~$
 ```
 
-switch user to the normal one:
-```shell
-root@username:/$ su light
-light@username:/$
-```
-
+## use chroot
 first let us clone the ola repository:
 ```shell
-light@username:/$ cd /home/light/
 light@username:~$ git clone https://github.com/OpenLightingProject/ola.git ola
 light@username:~$ cd ola
 light@username:~/ola$
@@ -257,8 +252,8 @@ light@username:~/ola$ sudo make install
 # lots of text ;-)
 light@username:/ola/$ sudo ldconfig
 light@username:~$
-
 ```
+
 now you can give it a test-run:
 ```shell
 light@username:/$ olad -l3
@@ -268,7 +263,6 @@ olad should start up.(on an emulated arm hw ;-) )
 if you have your work done exit the shell
 ```shell
 light@username:/$ exit
-root@username:/$ exit
 ```
 
 and if you did not use the `chroot_start.sh` script then you have to do the clean up:
